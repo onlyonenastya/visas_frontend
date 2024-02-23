@@ -1,78 +1,65 @@
 import "./VisasList.sass"
-import SearchBar from "../../Components/SearchBar/SearchBar";
-import {useEffect, useState} from "react";
-import VisaCard from "./VisaCard/VisaCard";
-import {iVisasMock, requestTime} from "../../Consts";
-import {Visa} from "../../Types";
+import SearchBar from "../../Components/SearchBar/SearchBar"
+import { useEffect, useState } from "react"
+import VisaCard from "./VisaCard/VisaCard"
+import { iVisasMock, requestTime } from "../../Consts"
+import { Visa } from "../../Types"
+import { Response } from "../../Types"
 
 const VisasList = () => {
+  const [visas, setVisas] = useState<Visa[]>([])
 
-    const [visas, setVisas] = useState<Visa[]>([]);
+  const [query, setQuery] = useState<string>("")
 
-    const [query, setQuery] = useState<string>("");
+  const [isMock, setIsMock] = useState<boolean>(false)
 
-    const [isMock, setIsMock] = useState<boolean>(false);
-
-    const searchVisas = async () => {
-
-        try {
-
-            const response = await fetch(`http://localhost:8000/api/visas/search?&query=${query}`, {
-                method: "GET",
-                signal: AbortSignal.timeout(requestTime)
-            })
-
-            if (!response.ok){
-                createMock();
-                return;
-            }
-
-            const visas: Visa[] = await response.json()
-
-            setVisas(visas["visas"])
-            setIsMock(false)
-
-        } catch (e) {
-
-            createMock()
-
+  const searchVisas = async () => {
+    try {
+      const response: Response = await fetch(
+        `http://localhost:8000/api/visas/search?&query=${query}`,
+        {
+          method: "GET",
+          signal: AbortSignal.timeout(requestTime),
         }
+      )
+
+      if (!response.ok) {
+        createMock()
+        return
+      }
+
+      const visas: Visa[] = response.data["visas"]
+      setVisas(visas)
+      setIsMock(false)
+    } catch (e) {
+      createMock()
     }
+  }
 
-    const createMock = () => {
+  const createMock = () => {
+    setIsMock(true)
+    setVisas(iVisasMock)
+  }
 
-        setIsMock(true);
-        setVisas(iVisasMock)
+  useEffect(() => {
+    searchVisas()
+  }, [query])
 
-    }
+  const cards = visas.map((visa) => (
+    <VisaCard visa={visa} key={visa.id} isMock={isMock} />
+  ))
 
-    useEffect(() => {
-        searchVisas()
-    }, [query])
+  return (
+    <div className="cards-list-wrapper">
+      <div className="top">
+        {/* <h2>Поиск виз</h2> */}
 
-    const cards = visas.map(visa  => (
-        <VisaCard visa={visa} key={visa.id} isMock={isMock}/>
-    ))
+        <SearchBar query={query} setQuery={setQuery} />
+      </div>
 
-    return (
-        <div className="cards-list-wrapper">
-
-            <div className="top">
-
-                <h2>Поиск виз</h2>
-
-                <SearchBar query={query} setQuery={setQuery} />
-
-            </div>
-
-            <div className="bottom">
-
-                { cards }
-
-            </div>
-
-        </div>
-    )
+      <div className="bottom">{cards}</div>
+    </div>
+  )
 }
 
-export default VisasList;
+export default VisasList

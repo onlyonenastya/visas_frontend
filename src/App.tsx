@@ -4,7 +4,7 @@ import { useState } from "react"
 import Header from "./Components/Header/Header"
 import { Visa } from "./Types"
 import Breadcrumbs from "./Components/Breadcrumbs/Breadcrumbs"
-import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom"
+import { BrowserRouter, Route, Routes } from "react-router-dom"
 import VisaPage from "./Pages/VisaPage/VisaPage"
 import VisasList from "./Pages/VisasList/VisasList"
 import ProfilePage from "./Pages/ProfilePage/ProfilePage"
@@ -19,10 +19,7 @@ function App() {
           <Header />
 
           <div className="content-wrapper">
-            <Breadcrumbs
-              selectedVisa={selectedVisa}
-              setSelectedVisa={setSelectedVisa}
-            />
+            <Breadcrumbs />
 
             <Routes>
               {/* <Route path="/" element={<Navigate to="/visas" replace />} /> */}
