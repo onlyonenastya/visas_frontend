@@ -5,6 +5,7 @@ interface SearchBarProps {
   query: string | number
   setQuery: (value: string) => void
 }
+
 const SearchBar: React.FC<SearchBarProps> = ({ query, setQuery }) => {
   const handleChange = (value: string) => {
     setQuery(value)

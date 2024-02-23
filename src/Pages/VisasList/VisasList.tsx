@@ -52,8 +52,6 @@ const VisasList = () => {
   return (
     <div className="cards-list-wrapper">
       <div className="top">
-        <h2>Поиск виз</h2>
-
         <SearchBar query={query} setQuery={setQuery} />
       </div>
 
