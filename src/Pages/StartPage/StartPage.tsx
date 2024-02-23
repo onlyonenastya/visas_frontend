@@ -1,4 +1,3 @@
-import React from "react"
 import styles from "./StartPage.module.scss"
 import Evc from "../../assets/evc.jpg"
 import { Link } from "react-router-dom"
